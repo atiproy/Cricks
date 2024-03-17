@@ -50,7 +50,7 @@ Once the application is running, you can access the Swagger UI at `http://localh
 
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check [issues page](https://github.com/atiproy/Cricks/issues). You can also take a look at the [contributing guide](https://github.com/atiproy/Cricks/CONTRIBUTING.md).
+Contributions, issues, and feature requests are welcome! Feel free to check [issues page](https://github.com/atiproy/Cricks/issues). You can also take a look at the [contributing guide](https://github.com/atiproy/Cricks/blob/master/CONTRIBUTING.md).
 
 ## 📝 License
 
