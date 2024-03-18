@@ -14,7 +14,7 @@ namespace Cricks.Data.DbModels
         public int BatsmanId { get; set; } // Identifier for the player who faced the ball
         public virtual Player Batsman { get; set; } // The player who faced the ball
         public int Runs { get; set; } // Runs scored from the ball
-        public  bool IsBye { get; set; } // Runs scored as a bye
+        public bool IsBye { get; set; } // Runs scored as a bye
         public bool IsLegBye { get; set; } // Runs scored as a leg bye
         public bool IsWicket { get; set; } // Whether a wicket fell on the ball
         public bool IsRetiredHurt { get; set; } // Whether Player retired as Hurt

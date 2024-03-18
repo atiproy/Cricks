@@ -92,17 +92,67 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Comments")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("Finished")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("GroupID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Scorer")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("Started")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Team1Id")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Team2Id")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("TournamentID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Umpire1")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Umpire2")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("MatchId");
+
+                    b.HasIndex("GroupID");
 
                     b.HasIndex("Team1Id");
 
                     b.HasIndex("Team2Id");
+
+                    b.HasIndex("TournamentID");
 
                     b.ToTable("CricketMatches");
                 });
@@ -132,11 +182,25 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("ExtraTypeId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("InningsId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("Runs")
                         .HasColumnType("INTEGER");
@@ -177,7 +241,30 @@ namespace Data.Migrations
                     b.Property<int>("BowlingTeamId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("MatchId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("Overs")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("TotalRuns")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("Wickets")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("InningsId");
@@ -197,11 +284,35 @@ namespace Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Comments")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsCaptain")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("PlayerTypeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Rating")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("TeamId")
@@ -236,6 +347,24 @@ namespace Data.Migrations
                     b.Property<int>("TeamId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Colour")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -287,6 +416,20 @@ namespace Data.Migrations
                     b.Property<int>("TournamentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -556,6 +699,10 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Cricks.Data.DbModels.CricketMatch", b =>
                 {
+                    b.HasOne("Cricks.Data.DbModels.TournamentGroup", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupID");
+
                     b.HasOne("Cricks.Data.DbModels.Team", "Team1")
                         .WithMany()
                         .HasForeignKey("Team1Id")
@@ -568,9 +715,17 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Cricks.Data.DbModels.Tournament", "Tournament")
+                        .WithMany("Matches")
+                        .HasForeignKey("TournamentID");
+
+                    b.Navigation("Group");
+
                     b.Navigation("Team1");
 
                     b.Navigation("Team2");
+
+                    b.Navigation("Tournament");
                 });
 
             modelBuilder.Entity("Cricks.Data.DbModels.Extra", b =>
@@ -750,6 +905,8 @@ namespace Data.Migrations
             modelBuilder.Entity("Cricks.Data.DbModels.Tournament", b =>
                 {
                     b.Navigation("Groups");
+
+                    b.Navigation("Matches");
                 });
 
             modelBuilder.Entity("Cricks.Data.DbModels.TournamentGroup", b =>

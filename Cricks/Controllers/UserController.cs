@@ -1,15 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
+using Model.Dto;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
-using Model.Dto;
 
 namespace Cricks.Controllers
 {

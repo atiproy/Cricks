@@ -1,6 +1,5 @@
 ﻿using Cricks.Data.DbModels;
 using Microsoft.AspNetCore.Identity;
-using System.Threading.Tasks;
 
 namespace Cricks.Data
 {
@@ -9,7 +8,7 @@ namespace Cricks.Data
         public static async Task InitializeAsync(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, CricksDataContext context)
         {
             // Create roles
-            var roles = new[] { "User", "Manager", "Admin", "Owner" };
+            var roles = new[] { "User", "Manager", "Admin", "Owner", "Scorer" };
             foreach (var role in roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))

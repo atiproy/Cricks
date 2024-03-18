@@ -18,6 +18,6 @@ namespace Cricks.Data.DbModels
         public string ModifiedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
-
+        public bool IsCaptain { get; set; }
     }
 }

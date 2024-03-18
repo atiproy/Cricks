@@ -1,11 +1,8 @@
+using Cricks.Data;
+using Cricks.Data.DbModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Cricks.Data.DbModels;
-using System.Threading.Tasks;
-using Cricks.Data;
-using Microsoft.Extensions.Logging;
-using System;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Cricks.Controllers
 {

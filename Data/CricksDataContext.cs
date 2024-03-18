@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Cricks.Data.DbModels;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Cricks.Data.DbModels;
-using System.Collections.Generic;
-using System.Numerics;
-using System.Reflection.Emit;
-using System.Text.RegularExpressions;
 
 namespace Cricks.Data
 {

@@ -1,11 +1,8 @@
+using Cricks.Data;
+using Cricks.Data.DbModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Cricks.Data.DbModels;
-using System.Threading.Tasks;
-using Cricks.Data;
-using Microsoft.Extensions.Logging;
-using System;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Cricks.Controllers
 {
@@ -70,6 +67,8 @@ namespace Cricks.Controllers
         {
             try
             {
+                team.CreatedBy = User.Identity.Name;
+                team.CreatedDate = DateTime.UtcNow;
                 _context.Teams.Add(team);
                 await _context.SaveChangesAsync();
 
@@ -95,6 +94,8 @@ namespace Cricks.Controllers
 
             try
             {
+                team.ModifiedBy = User.Identity.Name;
+                team.ModifiedDate = DateTime.UtcNow;
                 _context.Entry(team).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
 
@@ -107,6 +108,7 @@ namespace Cricks.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
 
         // DELETE: /team/5
         [HttpDelete("{id}")]

@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Model.Dto;
-using System;
-using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace Cricks.Controllers
 {
@@ -20,6 +18,16 @@ namespace Cricks.Controllers
         {
             _userManager = userManager;
             _logger = logger;
+        }
+
+        [HttpGet("debug")]
+        public IActionResult Debug()
+        {
+            var identity = User.Identity as ClaimsIdentity;
+            var roles = identity.Claims
+                                .Where(c => c.Type == ClaimTypes.Role)
+                                .Select(c => c.Value);
+            return Ok(new { isAuthenticated = User.Identity.IsAuthenticated, userName = User.Identity.Name, roles = roles });
         }
 
         [HttpPost("assignRole")]

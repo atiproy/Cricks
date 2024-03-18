@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -56,7 +56,8 @@ namespace Data.Migrations
                 {
                     DismissalTypeId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -95,7 +96,12 @@ namespace Data.Migrations
                 {
                     TeamId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Colour = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -108,7 +114,11 @@ namespace Data.Migrations
                 {
                     TournamentId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -222,32 +232,6 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CricketMatches",
-                columns: table => new
-                {
-                    MatchId = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Team1Id = table.Column<int>(type: "INTEGER", nullable: false),
-                    Team2Id = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CricketMatches", x => x.MatchId);
-                    table.ForeignKey(
-                        name: "FK_CricketMatches_Teams_Team1Id",
-                        column: x => x.Team1Id,
-                        principalTable: "Teams",
-                        principalColumn: "TeamId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CricketMatches_Teams_Team2Id",
-                        column: x => x.Team2Id,
-                        principalTable: "Teams",
-                        principalColumn: "TeamId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Players",
                 columns: table => new
                 {
@@ -255,7 +239,14 @@ namespace Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     TeamId = table.Column<int>(type: "INTEGER", nullable: true),
-                    PlayerTypeId = table.Column<int>(type: "INTEGER", nullable: false)
+                    PlayerTypeId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Rating = table.Column<int>(type: "INTEGER", nullable: false),
+                    Comments = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    IsCaptain = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -294,36 +285,52 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Innings",
+                name: "CricketMatches",
                 columns: table => new
                 {
-                    InningsId = table.Column<int>(type: "INTEGER", nullable: false)
+                    MatchId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    MatchId = table.Column<int>(type: "INTEGER", nullable: false),
-                    BattingTeamId = table.Column<int>(type: "INTEGER", nullable: false),
-                    BowlingTeamId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Team1Id = table.Column<int>(type: "INTEGER", nullable: false),
+                    Team2Id = table.Column<int>(type: "INTEGER", nullable: false),
+                    Location = table.Column<string>(type: "TEXT", nullable: false),
+                    Comments = table.Column<string>(type: "TEXT", nullable: false),
+                    TournamentID = table.Column<int>(type: "INTEGER", nullable: true),
+                    GroupID = table.Column<int>(type: "INTEGER", nullable: true),
+                    Umpire1 = table.Column<string>(type: "TEXT", nullable: false),
+                    Umpire2 = table.Column<string>(type: "TEXT", nullable: false),
+                    Scorer = table.Column<string>(type: "TEXT", nullable: false),
+                    Started = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Finished = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Innings", x => x.InningsId);
+                    table.PrimaryKey("PK_CricketMatches", x => x.MatchId);
                     table.ForeignKey(
-                        name: "FK_Innings_CricketMatches_MatchId",
-                        column: x => x.MatchId,
-                        principalTable: "CricketMatches",
-                        principalColumn: "MatchId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Innings_Teams_BattingTeamId",
-                        column: x => x.BattingTeamId,
+                        name: "FK_CricketMatches_Teams_Team1Id",
+                        column: x => x.Team1Id,
                         principalTable: "Teams",
                         principalColumn: "TeamId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Innings_Teams_BowlingTeamId",
-                        column: x => x.BowlingTeamId,
+                        name: "FK_CricketMatches_Teams_Team2Id",
+                        column: x => x.Team2Id,
                         principalTable: "Teams",
                         principalColumn: "TeamId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CricketMatches_TournamentGroups_GroupID",
+                        column: x => x.GroupID,
+                        principalTable: "TournamentGroups",
+                        principalColumn: "GroupId");
+                    table.ForeignKey(
+                        name: "FK_CricketMatches_Tournaments_TournamentID",
+                        column: x => x.TournamentID,
+                        principalTable: "Tournaments",
+                        principalColumn: "TournamentId");
                 });
 
             migrationBuilder.CreateTable(
@@ -358,6 +365,46 @@ namespace Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Innings",
+                columns: table => new
+                {
+                    InningsId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    MatchId = table.Column<int>(type: "INTEGER", nullable: false),
+                    BattingTeamId = table.Column<int>(type: "INTEGER", nullable: false),
+                    BowlingTeamId = table.Column<int>(type: "INTEGER", nullable: false),
+                    TotalRuns = table.Column<int>(type: "INTEGER", nullable: true),
+                    Wickets = table.Column<int>(type: "INTEGER", nullable: true),
+                    Overs = table.Column<int>(type: "INTEGER", nullable: true),
+                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Innings", x => x.InningsId);
+                    table.ForeignKey(
+                        name: "FK_Innings_CricketMatches_MatchId",
+                        column: x => x.MatchId,
+                        principalTable: "CricketMatches",
+                        principalColumn: "MatchId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Innings_Teams_BattingTeamId",
+                        column: x => x.BattingTeamId,
+                        principalTable: "Teams",
+                        principalColumn: "TeamId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Innings_Teams_BowlingTeamId",
+                        column: x => x.BowlingTeamId,
+                        principalTable: "Teams",
+                        principalColumn: "TeamId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Balls",
                 columns: table => new
                 {
@@ -367,11 +414,17 @@ namespace Data.Migrations
                     BowlerId = table.Column<int>(type: "INTEGER", nullable: false),
                     BatsmanId = table.Column<int>(type: "INTEGER", nullable: false),
                     Runs = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsBye = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IsLegBye = table.Column<bool>(type: "INTEGER", nullable: false),
                     IsWicket = table.Column<bool>(type: "INTEGER", nullable: false),
+                    IsRetiredHurt = table.Column<bool>(type: "INTEGER", nullable: false),
                     IsWide = table.Column<bool>(type: "INTEGER", nullable: false),
                     IsNoBall = table.Column<bool>(type: "INTEGER", nullable: false),
                     DismissalTypeId = table.Column<int>(type: "INTEGER", nullable: true),
-                    FielderId = table.Column<int>(type: "INTEGER", nullable: true)
+                    FielderId = table.Column<int>(type: "INTEGER", nullable: true),
+                    SecondFielderId = table.Column<int>(type: "INTEGER", nullable: true),
+                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -404,6 +457,11 @@ namespace Data.Migrations
                         column: x => x.FielderId,
                         principalTable: "Players",
                         principalColumn: "PlayerId");
+                    table.ForeignKey(
+                        name: "FK_Balls_Players_SecondFielderId",
+                        column: x => x.SecondFielderId,
+                        principalTable: "Players",
+                        principalColumn: "PlayerId");
                 });
 
             migrationBuilder.CreateTable(
@@ -414,7 +472,11 @@ namespace Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     InningsId = table.Column<int>(type: "INTEGER", nullable: false),
                     ExtraTypeId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Runs = table.Column<int>(type: "INTEGER", nullable: false)
+                    Runs = table.Column<int>(type: "INTEGER", nullable: false),
+                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -496,6 +558,16 @@ namespace Data.Migrations
                 column: "InningsId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Balls_SecondFielderId",
+                table: "Balls",
+                column: "SecondFielderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CricketMatches_GroupID",
+                table: "CricketMatches",
+                column: "GroupID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CricketMatches_Team1Id",
                 table: "CricketMatches",
                 column: "Team1Id");
@@ -504,6 +576,11 @@ namespace Data.Migrations
                 name: "IX_CricketMatches_Team2Id",
                 table: "CricketMatches",
                 column: "Team2Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CricketMatches_TournamentID",
+                table: "CricketMatches",
+                column: "TournamentID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Extras_ExtraTypeId",
@@ -602,19 +679,19 @@ namespace Data.Migrations
                 name: "Innings");
 
             migrationBuilder.DropTable(
-                name: "TournamentGroups");
-
-            migrationBuilder.DropTable(
                 name: "PlayerTypes");
 
             migrationBuilder.DropTable(
                 name: "CricketMatches");
 
             migrationBuilder.DropTable(
-                name: "Tournaments");
+                name: "Teams");
 
             migrationBuilder.DropTable(
-                name: "Teams");
+                name: "TournamentGroups");
+
+            migrationBuilder.DropTable(
+                name: "Tournaments");
         }
     }
 }
