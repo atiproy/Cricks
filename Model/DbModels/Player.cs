@@ -12,5 +12,12 @@ namespace Cricks.Data.DbModels
         public virtual Team? Team { get; set; } // The team the player belongs to
         public int PlayerTypeId { get; set; } // Identifier for the type of player
         public virtual PlayerType PlayerType { get; set; } // The type of player
+        public int Rating { get; set; }
+        public string Comments { get; set; }
+        public string CreatedBy { get; set; }
+        public string ModifiedBy { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
+
     }
 }

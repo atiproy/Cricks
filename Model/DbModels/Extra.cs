@@ -12,5 +12,9 @@ namespace Cricks.Data.DbModels
         public int ExtraTypeId { get; set; } // Identifier for the type of extra run
         public virtual ExtraType ExtraType { get; set; } // The type of extra run
         public int Runs { get; set; } // The number of extra runs
+        public string CreatedBy { get; set; }
+        public string ModifiedBy { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
     }
 }

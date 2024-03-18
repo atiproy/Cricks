@@ -108,7 +108,8 @@ using (var scope = scopeFactory.CreateScope())
 {
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    await DbInitializer.InitializeAsync(userManager, roleManager);
+    var context = scope.ServiceProvider.GetRequiredService<CricksDataContext>();
+    await DbInitializer.InitializeAsync(userManager, roleManager, context);
 }
 
 

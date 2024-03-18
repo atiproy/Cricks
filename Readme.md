@@ -6,7 +6,7 @@
 ![MySQL](https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/postgresql-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 
-Cricks API is a robust and secure web application built with .NET 8.0, providing weather forecasts. It uses Entity Framework Core for data storage and JWT for authentication.
+Cricks API is a robust and secure web application built with .NET 8.0, providing cricket match scoring and management. It uses Entity Framework Core for data storage and JWT for authentication.
 
 ## Table of Contents
 
@@ -27,7 +27,23 @@ Cricks API is a robust and secure web application built with .NET 8.0, providing
 
 ## 📚 API Endpoints
 
-- `GET /WeatherForecast`: Returns a list of weather forecasts.
+- `GET /matches`: Returns a list of cricket matches.
+- `GET /matches/{id}`: Returns a specific cricket match by ID.
+- `POST /matches`: Creates a new cricket match.
+- `PUT /matches/{id}`: Updates an existing cricket match.
+- `DELETE /matches/{id}`: Deletes a cricket match.
+
+- `GET /tournament`: Returns a list of tournaments.
+- `GET /tournament/{id}`: Returns a specific tournament by ID.
+- `POST /tournament`: Creates a new tournament.
+- `PUT /tournament/{id}`: Updates an existing tournament.
+- `DELETE /tournament/{id}`: Deletes a tournament.
+
+- `GET /ball`: Returns a list of balls.
+- `GET /ball/{id}`: Returns a specific ball by ID.
+- `POST /ball`: Creates a new ball.
+- `PUT /ball/{id}`: Updates an existing ball.
+- `DELETE /ball/{id}`: Deletes a ball.
 
 ## 🛠️ Setup
 
@@ -62,11 +78,35 @@ Created by [@atiproy](https://github.com/atiproy) - feel free to contact me!
 
 ## 📖 Detailed Documentation
 
-### WeatherForecastController
+### MatchesController
 
-The `WeatherForecastController` is an API controller that provides weather forecasts. It has the following methods:
+The `MatchesController` is an API controller that provides cricket match management. It has the following methods:
 
-- `GET /WeatherForecast`: Returns a list of weather forecasts. This endpoint is secured and requires the user to have the "Owner" role.
+- `GET /matches`: Returns a list of cricket matches.
+- `GET /matches/{id}`: Returns a specific cricket match by ID.
+- `POST /matches`: Creates a new cricket match.
+- `PUT /matches/{id}`: Updates an existing cricket match.
+- `DELETE /matches/{id}`: Deletes a cricket match.
+
+### TournamentController
+
+The `TournamentController` is an API controller that provides tournament management. It has the following methods:
+
+- `GET /tournament`: Returns a list of tournaments.
+- `GET /tournament/{id}`: Returns a specific tournament by ID.
+- `POST /tournament`: Creates a new tournament.
+- `PUT /tournament/{id}`: Updates an existing tournament.
+- `DELETE /tournament/{id}`: Deletes a tournament.
+
+### BallController
+
+The `BallController` is an API controller that provides ball management. It has the following methods:
+
+- `GET /ball`: Returns a list of balls.
+- `GET /ball/{id}`: Returns a specific ball by ID.
+- `POST /ball`: Creates a new ball.
+- `PUT /ball/{id}`: Updates an existing ball.
+- `DELETE /ball/{id}`: Deletes a ball.
 
 ### Authentication
 
@@ -74,7 +114,7 @@ The application uses JWT for authentication. The JWT is included in the `Authori
 
 ### Authorization
 
-The application uses role-based authorization. The `WeatherForecastController` requires the user to have the "Owner" role.
+The application uses role-based authorization. The `TournamentController` requires the user to have the "Owner" role.
 
 ### Database
 
