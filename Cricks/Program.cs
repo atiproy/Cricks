@@ -41,12 +41,17 @@ builder.Services.AddControllers();
 // Add API explorer services to the DI container
 builder.Services.AddEndpointsApiExplorer();
 
+//Adding Azure Services logging
+builder.Services.AddLogging(builder =>
+{
+    builder.AddAzureWebAppDiagnostics();
+});
+
 // Add Swagger services to the DI container and configure it
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "Cricks API", Version = "v1" });
 
-    // Add JWT authentication to Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below.",

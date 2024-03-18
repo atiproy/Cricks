@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cricks.Controllers
 {
-    [ApiController]
+
     [Authorize(Roles = "Owner")]
+    [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
