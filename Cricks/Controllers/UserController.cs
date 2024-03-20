@@ -68,19 +68,17 @@ namespace Cricks.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var result = await _signInManager.PasswordSignInAsync(loginDto.Username, loginDto.Password, isPersistent: false, lockoutOnFailure: false);
-
-                if (result.Succeeded)
+                var user = await _userManager.FindByNameAsync(loginDto.Username);
+                if (user != null && await _userManager.CheckPasswordAsync(user, loginDto.Password))
                 {
-                    var user = await _userManager.FindByNameAsync(loginDto.Username);
                     var roles = await _userManager.GetRolesAsync(user);
 
                     var claims = new List<Claim>
-                    {
-                        new Claim(JwtRegisteredClaimNames.Sub, loginDto.Username),
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                        new Claim(ClaimTypes.NameIdentifier, user.Id)
-                    };
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, loginDto.Username),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
+            };
 
                     foreach (var role in roles)
                     {
@@ -94,7 +92,7 @@ namespace Cricks.Controllers
                         issuer: _configuration["JwtIssuer"],
                         audience: _configuration["JwtIssuer"],
                         claims: claims,
-                        expires: DateTime.Now.AddMinutes(30),
+                        expires: DateTime.Now.AddDays(30),
                         signingCredentials: creds);
 
                     _logger.LogInformation("User logged in: {username}", loginDto.Username);
