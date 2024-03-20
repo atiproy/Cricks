@@ -21,22 +21,38 @@ namespace Cricks.Controllers
             _logger = logger;
         }
 
-        // POST: /scoring
         [HttpPost]
         public async Task<IActionResult> Post(ScoringDto scoring)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
+                // Calculate total runs
+                var totalRuns = scoring.BatsmanRun + scoring.LegBye + scoring.Bye + scoring.PenaltyRun;
+                if (scoring.IsWide || scoring.IsNoBall)
+                {
+                    totalRuns += 1;
+                }
+
+                // Calculate over number and ball number
+                var totalBalls = await _context.Balls.CountAsync(b => b.InningsId == scoring.InningsId && !b.IsWide && !b.IsNoBall);
+                var overNumber = totalBalls / 6 + 1;
+                var ballNumber = totalBalls % 6 + 1;
+
+
                 // Create a new ball
                 var ball = new Ball
                 {
                     InningsId = scoring.InningsId,
+                    OverNumber = overNumber,
+                    BallNumber = ballNumber,
                     BowlerId = scoring.BowlerId,
                     BatsmanId = scoring.StrikerBatsmanId,
-                    Runs = scoring.Runs,
-                    IsBye = scoring.IsBye,
-                    IsLegBye = scoring.IsLegBye,
+                    Runs = totalRuns,
+                    BatsmanRun = scoring.BatsmanRun,
+                    Bye = scoring.Bye,
+                    LegBye = scoring.LegBye,
+                    PenaltyRun = scoring.PenaltyRun,
                     IsWicket = scoring.IsWicket,
                     IsRetiredHurt = scoring.IsRetiredHurt,
                     IsWide = scoring.IsWide,
@@ -48,31 +64,17 @@ namespace Cricks.Controllers
                 };
                 _context.Balls.Add(ball);
 
-                // Create a new extra run if necessary
-                if (scoring.IsBye || scoring.IsLegBye || scoring.IsWide || scoring.IsNoBall)
-                {
-                    var extra = new Extra
-                    {
-                        InningsId = scoring.InningsId,
-                        ExtraTypeId = (int)scoring.ExtraTypeId,
-                        Runs = scoring.Runs,
-                        CreatedBy = User.Identity.Name,
-                        CreatedDate = DateTime.UtcNow
-                    };
-                    _context.Extras.Add(extra);
-                }
-
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
                 _logger.LogInformation("Created scoring with ball id {id}", ball.BallId);
 
                 // Calculate the new striker and non-striker batsman IDs
-                var newStrikerBatsmanId = scoring.Runs % 2 == 0 ? scoring.StrikerBatsmanId : scoring.NonStrikerBatsmanId;
-                var newNonStrikerBatsmanId = scoring.Runs % 2 == 0 ? scoring.NonStrikerBatsmanId : scoring.StrikerBatsmanId;
+                var newStrikerBatsmanId = totalRuns % 2 == 0 ? scoring.StrikerBatsmanId : scoring.NonStrikerBatsmanId;
+                var newNonStrikerBatsmanId = totalRuns % 2 == 0 ? scoring.NonStrikerBatsmanId : scoring.StrikerBatsmanId;
 
                 // Check if the over is completed
-                var overCompleted = await _context.Balls.CountAsync(b => b.InningsId == scoring.InningsId) % 6 == 0;
+                var overCompleted = ballNumber == 6;
 
                 return Ok(new { newStrikerBatsmanId, newNonStrikerBatsmanId, overCompleted });
             }
@@ -83,5 +85,6 @@ namespace Cricks.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
     }
 }
