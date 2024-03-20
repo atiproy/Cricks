@@ -4,6 +4,7 @@ using Cricks.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(CricksDataContext))]
-    partial class CricksDataContextModelSnapshot : ModelSnapshot
+    [Migration("20240320141252_aLot")]
+    partial class aLot
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -403,9 +406,6 @@ namespace Data.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("GroupId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -416,12 +416,7 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TournamentGroupGroupId")
-                        .HasColumnType("int");
-
                     b.HasKey("TeamId");
-
-                    b.HasIndex("TournamentGroupGroupId");
 
                     b.ToTable("Teams");
                 });
@@ -867,15 +862,6 @@ namespace Data.Migrations
                     b.Navigation("PlayerType");
 
                     b.Navigation("Team");
-                });
-
-            modelBuilder.Entity("Cricks.Data.DbModels.Team", b =>
-                {
-                    b.HasOne("Cricks.Data.DbModels.TournamentGroup", "TournamentGroup")
-                        .WithMany()
-                        .HasForeignKey("TournamentGroupGroupId");
-
-                    b.Navigation("TournamentGroup");
                 });
 
             modelBuilder.Entity("Cricks.Data.DbModels.TeamStats", b =>

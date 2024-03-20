@@ -3,6 +3,7 @@ using Cricks.Data.DbModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Model.Dto;
 
 namespace Cricks.Controllers
 {
@@ -43,7 +44,11 @@ namespace Cricks.Controllers
         {
             try
             {
-                var tournament = await _context.Tournaments.FindAsync(id);
+                var tournament = await _context.Tournaments
+                    .Include(t => t.Groups)
+                    .ThenInclude(g => g.TeamStats)
+                    .ThenInclude(ts => ts.Team)
+                    .FirstOrDefaultAsync(t => t.TournamentId == id);
 
                 if (tournament == null)
                 {
@@ -51,22 +56,52 @@ namespace Cricks.Controllers
                     return NotFound();
                 }
 
-                _logger.LogInformation("Fetched tournament with id {id}", id);
-                return Ok(tournament);
+                var tourneyDto = new TourneyDto
+                {
+                    Id = tournament.TournamentId,
+                    TournamentName = tournament.Name,
+                    TournamentDescription = tournament.Description,
+                    Groups = tournament.Groups.Select(g => new TournamentGroupDTO
+                    {
+                        GroupID = g.GroupId,
+                        Name = g.Name,
+                        TeamStats = g.TeamStats.Select(ts => new TeamStats
+                        {
+                            TeamId = ts.TeamId,
+                            MatchesPlayed = ts.MatchesPlayed,
+                            MatchesWon = ts.MatchesWon,
+                            MatchesLost = ts.MatchesLost,
+                            Points = ts.Points,
+                            RunRate = ts.RunRate
+                        }).ToList()
+                    }).ToList()
+                };
+
+                _logger.LogInformation("Fetched tournament details with id {id}", id);
+                return Ok(tourneyDto);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error fetching tournament with id {id}", id);
+                _logger.LogError(ex, "Error fetching tournament details with id {id}", id);
                 return StatusCode(500, "Internal server error");
             }
         }
 
+
         // POST: /tournament
         [HttpPost]
-        public async Task<IActionResult> Post(Tournament tournament)
+        public async Task<IActionResult> Post(TournamentDTO tournamentDto)
         {
             try
             {
+                var tournament = new Tournament
+                {
+                    Name = tournamentDto.Name,
+                    Description = tournamentDto.Description,
+                    CreatedBy = User.Identity.Name,
+                    CreatedDate = DateTime.UtcNow
+                };
+
                 _context.Tournaments.Add(tournament);
                 await _context.SaveChangesAsync();
 
@@ -82,19 +117,23 @@ namespace Cricks.Controllers
 
         // PUT: /tournament/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Tournament tournament)
+        public async Task<IActionResult> Put(int id, TournamentDTO tournamentDto)
         {
-            if (id != tournament.TournamentId)
+            var tournament = await _context.Tournaments.FindAsync(id);
+            if (tournament == null)
             {
-                _logger.LogWarning("Mismatch between tournament id in URL and body");
-                return BadRequest();
+                _logger.LogWarning("Tournament with id {id} not found", id);
+                return NotFound();
             }
+
+            tournament.Name = tournamentDto.Name;
+            tournament.Description = tournamentDto.Description;
+            tournament.ModifiedBy = User.Identity.Name;
+            tournament.ModifiedDate = DateTime.UtcNow;
 
             try
             {
-                _context.Entry(tournament).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
-
                 _logger.LogInformation("Updated tournament with id {id}", id);
                 return NoContent();
             }

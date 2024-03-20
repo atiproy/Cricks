@@ -11,5 +11,10 @@ namespace Cricks.Data.DbModels
         public int TournamentId { get; set; } // Identifier for the tournament the group belongs to
         public virtual Tournament Tournament { get; set; } // The tournament the group belongs to
         public virtual ICollection<TeamStats> TeamStats { get; set; } // Collection of team stats in the group
+        public string? CreatedBy { get; set; }
+        public string? ModifiedBy { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public DateTime? ModifiedOn { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

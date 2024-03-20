@@ -2,6 +2,7 @@ using Cricks.Data;
 using Cricks.Data.DbModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Model.Dto;
 
 namespace Cricks.Controllers
 {
@@ -61,10 +62,25 @@ namespace Cricks.Controllers
 
         // POST: /player
         [HttpPost]
-        public async Task<IActionResult> Post(Player player)
+        public async Task<IActionResult> Post(PlayerDTO playerDto)
         {
             try
             {
+                var player = new Player
+                {
+                    // Map properties from DTO to Player
+                    Name = playerDto.Name,
+                    TeamId = playerDto.TeamId,
+                    PlayerTypeId = playerDto.PlayerTypeId,
+                    Rating = playerDto.Rating,
+                    Comments = playerDto.Comments,
+                    CreatedBy = playerDto.CreatedBy,
+                    ModifiedBy = playerDto.ModifiedBy,
+                    CreatedDate = playerDto.CreatedDate,
+                    ModifiedDate = playerDto.ModifiedDate,
+                    IsCaptain = playerDto.IsCaptain
+                };
+
                 _context.Players.Add(player);
                 await _context.SaveChangesAsync();
 
@@ -80,19 +96,30 @@ namespace Cricks.Controllers
 
         // PUT: /player/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Player player)
+        public async Task<IActionResult> Put(int id, PlayerDTO playerDto)
         {
-            if (id != player.PlayerId)
+            var player = await _context.Players.FindAsync(id);
+            if (player == null)
             {
-                _logger.LogWarning("Mismatch between player id in URL and body");
-                return BadRequest();
+                _logger.LogWarning("Player with id {id} not found", id);
+                return NotFound();
             }
+
+            // Map properties from DTO to Player
+            player.Name = playerDto.Name ?? "";
+            player.TeamId = playerDto.TeamId ?? default(int);
+            player.PlayerTypeId = playerDto.PlayerTypeId ?? default(int);
+            player.Rating = playerDto.Rating ?? default(int);
+            player.Comments = playerDto.Comments ?? "";
+            player.CreatedBy = playerDto.CreatedBy ?? "";
+            player.ModifiedBy = playerDto.ModifiedBy ?? "";
+            player.CreatedDate = playerDto.CreatedDate ?? default(DateTime);
+            player.ModifiedDate = playerDto.ModifiedDate ?? default(DateTime);
+            player.IsCaptain = playerDto.IsCaptain;
 
             try
             {
-                _context.Entry(player).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
-
                 _logger.LogInformation("Updated player with id {id}", id);
                 return NoContent();
             }
@@ -102,6 +129,7 @@ namespace Cricks.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
 
         // DELETE: /player/5
         [HttpDelete("{id}")]

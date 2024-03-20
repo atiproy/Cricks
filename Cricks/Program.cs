@@ -6,14 +6,21 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
-// Create a WebApplication builder with the arguments passed to the program
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
-// Add the DbContext and configure it to use SQLite with the connection string from the configuration
+// Add the DbContext and configure it to use
+//-----------------------------------------------------------------------------------------------------
 builder.Services.AddDbContext<CricksDataContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+    // For SQlite
+    //options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite"))); 
+
+    // For SqlServer
+    options.UseSqlServer(builder.Configuration.GetConnectionString("LocalSQLServer")));
+//-----------------------------------------------------------------------------------------------------
+
 
 // Add Identity services to the DI container and configure it to use the DbContext for storage
 builder.Services.AddIdentity<IdentityUser, IdentityRole>() // Add IdentityRole here
@@ -45,6 +52,8 @@ builder.Services.AddControllers();
 
 // Add API explorer services to the DI container
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddCors();
 
 //Adding Azure Services logging
 builder.Services.AddLogging(builder =>
@@ -87,6 +96,14 @@ builder.Services.AddSwaggerGen(c =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+
+// Use CORS middleware
+app.UseCors(x => x
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .SetIsOriginAllowed(origin => true) // allow any origin
+    .AllowCredentials()); // allow credentials
 
 // Use Swagger in development environment
 if (app.Environment.IsDevelopment())
