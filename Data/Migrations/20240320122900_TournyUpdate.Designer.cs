@@ -4,6 +4,7 @@ using Cricks.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(CricksDataContext))]
-    partial class CricksDataContextModelSnapshot : ModelSnapshot
+    [Migration("20240320122900_TournyUpdate")]
+    partial class TournyUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,12 +117,14 @@ namespace Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MatchId"));
 
                     b.Property<string>("Comments")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("CreatedDate")
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("Finished")
@@ -128,55 +133,39 @@ namespace Data.Migrations
                     b.Property<int?>("GroupID")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("IsDrawn")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Location")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ModifiedBy")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("ModifiedDate")
+                    b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Scorer")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("Started")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("Team1Balls")
-                        .HasColumnType("int");
-
                     b.Property<int>("Team1Id")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Team1Score")
-                        .HasColumnType("int");
-
-                    b.Property<bool?>("Team1TossWin")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Team1Winner")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("Team2Balls")
-                        .HasColumnType("int");
-
                     b.Property<int>("Team2Id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Team2Score")
                         .HasColumnType("int");
 
                     b.Property<int?>("TournamentID")
                         .HasColumnType("int");
 
                     b.Property<string>("Umpire1")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Umpire2")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MatchId");
@@ -395,33 +384,28 @@ namespace Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TeamId"));
 
                     b.Property<string>("Colour")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("CreatedDate")
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("GroupId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ModifiedBy")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("ModifiedDate")
+                    b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TournamentGroupGroupId")
-                        .HasColumnType("int");
-
                     b.HasKey("TeamId");
-
-                    b.HasIndex("TournamentGroupGroupId");
 
                     b.ToTable("Teams");
                 });
@@ -503,21 +487,6 @@ namespace Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GroupId"));
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -867,15 +836,6 @@ namespace Data.Migrations
                     b.Navigation("PlayerType");
 
                     b.Navigation("Team");
-                });
-
-            modelBuilder.Entity("Cricks.Data.DbModels.Team", b =>
-                {
-                    b.HasOne("Cricks.Data.DbModels.TournamentGroup", "TournamentGroup")
-                        .WithMany()
-                        .HasForeignKey("TournamentGroupGroupId");
-
-                    b.Navigation("TournamentGroup");
                 });
 
             modelBuilder.Entity("Cricks.Data.DbModels.TeamStats", b =>

@@ -9,13 +9,17 @@ namespace Cricks.Data.DbModels
         public int BallId { get; set; } // Unique identifier for the ball
         public int InningsId { get; set; } // Identifier for the innings the ball belongs to
         public virtual Innings Innings { get; set; } // The innings the ball belongs to
+        public int OverNumber { get; set; } //
+        public int BallNumber { get; set; } //
         public int BowlerId { get; set; } // Identifier for the player who bowled the ball
         public virtual Player Bowler { get; set; } // The player who bowled the ball
         public int BatsmanId { get; set; } // Identifier for the player who faced the ball
         public virtual Player Batsman { get; set; } // The player who faced the ball
         public int Runs { get; set; } // Runs scored from the ball
-        public bool IsBye { get; set; } // Runs scored as a bye
-        public bool IsLegBye { get; set; } // Runs scored as a leg bye
+        public int BatsmanRun { get; set; } // Runs scored on account of Batsman
+        public int PenaltyRun { get; set; } // Penalty Given by officials
+        public int Bye { get; set; } // Runs scored as a bye
+        public int LegBye { get; set; } // Runs scored as a leg bye
         public bool IsWicket { get; set; } // Whether a wicket fell on the ball
         public bool IsRetiredHurt { get; set; } // Whether Player retired as Hurt
         public bool IsWide { get; set; } // Whether the ball was a wide

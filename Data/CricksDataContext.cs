@@ -30,12 +30,50 @@ namespace Cricks.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configure relationships between your models here
-            // For example:
-            // modelBuilder.Entity<Team>()
-            //     .HasMany(t => t.Players)
-            //     .WithOne(p => p.Team)
-            //     .HasForeignKey(p => p.TeamId);
+            modelBuilder.Entity<CricketMatch>()
+                .HasOne(cm => cm.Team1)
+                .WithMany(t => t.CricketMatchesAsTeam1)
+                .HasForeignKey(cm => cm.Team1Id)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<CricketMatch>()
+                .HasOne(cm => cm.Team2)
+                .WithMany(t => t.CricketMatchesAsTeam2)
+                .HasForeignKey(cm => cm.Team2Id)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Innings>()
+                .HasOne(i => i.BattingTeam)
+                .WithMany(t => t.InningsAsBattingTeam)
+                .HasForeignKey(i => i.BattingTeamId)
+                .OnDelete(DeleteBehavior.NoAction); // or .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Innings>()
+                .HasOne(i => i.BowlingTeam)
+                .WithMany(t => t.InningsAsBowlingTeam)
+                .HasForeignKey(i => i.BowlingTeamId)
+                .OnDelete(DeleteBehavior.NoAction); // or .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Ball>()
+                .HasOne(b => b.Batsman)
+                .WithMany(p => p.BatsmanBalls)
+                .HasForeignKey(b => b.BatsmanId)
+                .OnDelete(DeleteBehavior.NoAction); // or .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Ball>()
+                .HasOne(b => b.Bowler)
+                .WithMany(p => p.BowlerBalls)
+                .HasForeignKey(b => b.BowlerId)
+                .OnDelete(DeleteBehavior.NoAction); // or .OnDelete(DeleteBehavior.SetNull);
+
+
+            modelBuilder.Entity<Ball>()
+               .HasOne(b => b.Fielder)
+               .WithMany(p => p.FielderBalls)
+               .HasForeignKey(b => b.FielderId)
+               .OnDelete(DeleteBehavior.NoAction); // or .OnDelete(DeleteBehavior.SetNull);
+
+
         }
     }
 }

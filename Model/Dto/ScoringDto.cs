@@ -4,9 +4,10 @@
     {
         public int StrikerBatsmanId { get; set; }
         public int NonStrikerBatsmanId { get; set; }
-        public int Runs { get; set; }
-        public bool IsBye { get; set; }
-        public bool IsLegBye { get; set; }
+        public int Bye { get; set; }
+        public int LegBye { get; set; }
+        public int BatsmanRun { get; set; }
+        public int PenaltyRun { get; set; }
         public bool IsWide { get; set; }
         public bool IsNoBall { get; set; }
         public int BowlerId { get; set; }

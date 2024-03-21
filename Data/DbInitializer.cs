@@ -81,6 +81,23 @@ namespace Cricks.Data
                 }
             }
 
+            var playerTypes = new List<PlayerType>
+            {
+                new PlayerType { Name = "Batsman" },
+                new PlayerType { Name = "Bowler" },
+                new PlayerType { Name = "All-Rounder" },
+                new PlayerType { Name = "Wicket-Keeper" },
+                new PlayerType { Name = "Only-Fielder" }
+            };
+
+            foreach (var playerType in playerTypes)
+            {
+                if (!context.PlayerTypes.Any(pt => pt.Name == playerType.Name))
+                {
+                    context.PlayerTypes.Add(playerType);
+                }
+            }
+
             await context.SaveChangesAsync();
         }
     }

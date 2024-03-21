@@ -1,10 +1,12 @@
 using Cricks.Data;
 using Cricks.Data.DbModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cricks.Controllers
 {
+    [Authorize(Roles = "Owner,Admin")]
     [ApiController]
     [Route("[controller]")]
     public class PlayerTypeController : ControllerBase
